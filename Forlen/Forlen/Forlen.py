@@ -51,7 +51,8 @@ def get_text_messages(message):
         if user_input.lower() == dictionary[last_word[chat_id]]:
             user_score[chat_id] += 1
             user_was_wrong[chat_id] = False
-            bot.send_message(chat_id, f"Правильно! +1 очко. Теперь ваш счет: {user_score[chat_id]}**")
+            bot.send_message(chat_id, f"Правильно! +1 очко. Теперь ваш счет: {user_score[chat_id]}")
+            send_word(chat_id)
         else:
             user_score[chat_id] -= 1
             user_was_wrong[chat_id] = True
@@ -61,7 +62,7 @@ def get_text_messages(message):
         if message.text.lower() == "/help":
             bot.send_message(chat_id, "Используйте кнопки для управления игрой.", reply_markup=generate_markup())
         else:
-            bot.send_message(chat_id, "Я тебя не понимаю. Напиши /help.")
+            bot.send_message(chat_id, "Я вас не понимаю. Напишите /help.")
 
 def generate_markup():
     markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
@@ -89,9 +90,10 @@ def button_handler(message):
         elif chat_id in user_score:
             user_score[chat_id] -= 1
             bot.send_message(chat_id, f"Не пытайтесь меня обмануть. Минус балл. Теперь ваш счет: {user_score[chat_id]}")
+            bot.send_message(chat_id, f"Переведите {last_word[chat_id]}")
         return True
     elif message.text == "Помощь":
-        bot.send_message(chat_id, "<i>Для старта игры введите команду /start_game или нажмите кнопку 'Начать игру' Бот начнет присылать вам слова на испанском, в ответе вам нужно написать перевод этого слова на русский. В случае если вы бот несправедливо не зачел вам перевод, используйте команду /iwasright или нажмите кнопку 'Я был(а) прав(а)' Для выхода из игры введите команду /exit_game или нажмите кнопку 'Выйти из игры'</i>", parse_mode='HTML', reply_markup=generate_markup())
+        bot.send_message(chat_id, "<i>Для старта игры введите команду /start_game или нажмите кнопку 'Начать игру' Бот начнет присылать вам слова на испанском, в ответе вам нужно написать перевод этого слова на русский. В случае если вы бот несправедливо не зачел вам перевод, нажмите кнопку 'Я был(а) прав(а)' Для выхода из игры введите команду /stop_game или нажмите кнопку 'Выйти из игры'</i>", parse_mode='HTML', reply_markup=generate_markup())
         return True
 
 bot.polling(none_stop=True, interval=0)
