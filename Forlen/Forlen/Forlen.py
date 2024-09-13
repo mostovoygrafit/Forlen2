@@ -1,4 +1,4 @@
-﻿import telebot
+﻿import telebot #fix dependence
 import random
 from telebot.types import ReplyKeyboardMarkup
 
